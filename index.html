@@ -113,7 +113,13 @@
     const intro = document.getElementById("intro-sound");
     if (intro) intro.play();
   });
-
+  
+const intro = document.getElementById("intro-sound");
+if (intro) {
+  intro.muted = false;
+  intro.currentTime = 0;
+  intro.play();
+}
   function checkName() {
     const input = document.getElementById("nameInput").value.trim().toLowerCase();
     const error = document.getElementById("errorMsg");
