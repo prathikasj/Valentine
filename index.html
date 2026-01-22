@@ -1,25 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Srinath,will You Be My Valentine?</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secret Valentine 💖</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* Name gate styling */
+    .name-gate {
+      position: fixed;
+      inset: 0;
+      background: #f9e3e3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      animation: fadeIn 1s ease;
+    }
+
+    .name-box {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      animation: popIn 0.8s ease;
+    }
+
+    .name-box h2 {
+      color: #d32f2f;
+      margin-bottom: 15px;
+    }
+
+    .name-box input {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 2px solid #d32f2f;
+      text-align: center;
+      outline: none;
+    }
+
+    .name-box button {
+      margin-top: 15px;
+      padding: 8px 20px;
+      border: none;
+      background: #d32f2f;
+      color: white;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #d32f2f;
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+
+    @keyframes popIn {
+      0% {transform: scale(0.5); opacity: 0;}
+      100% {transform: scale(1); opacity: 1;}
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Srinath, will you be my Valentine?</h1>
-        <div class="buttons">
-            <button class="yes-button" onclick="handleYesClick()">Yes</button>
-            <button class="no-button" onclick="handleNoClick()">No</button>
-        </div>
-        <div class="gif_container">
-            <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW5lenZyZHI5OXM2eW95b3pmMG40cWVrMDhtNjVuM3A4dGNxa2g2dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VM1fcpu2bKs1e2Kdbj/giphy.gif" alt="Cute GIF">
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-<audio id="bg-music" autoplay>
+
+<!-- Intro sound for name gate -->
+<audio id="intro-sound">
+  <source src="intro_gate.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Background music (starts only after correct name) -->
+<audio id="bg-music">
   <source src="bg_music.mp3" type="audio/mpeg">
 </audio>
+
+<!-- Name Gate -->
+<div class="name-gate" id="nameGate">
+  <div class="name-box">
+    <h2>Top secret access — Lover's name 🕵️‍♂️🧐</h2>
+    <input type="text" id="nameInput" placeholder="Your name here">
+    <br>
+    <button onclick="checkName()">Continue</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+</div>
+
+<!-- Valentine Content -->
+<div id="valentineContent" style="display:none;">
+  <div class="container">
+    <h1>Will you be my Valentine?</h1>
+    <div class="buttons">
+      <button class="yes-button" onclick="handleYesClick()">Yes</button>
+      <button class="no-button" onclick="handleNoClick()">No</button>
+    </div>
+    <div class="gif_container">
+      <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW5lenZyZHI5OXM2eW95b3pmMG40cWVrMDhtNjVuM3A4dGNxa2g2dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VM1fcpu2bKs1e2Kdbj/giphy.gif">
+    </div>
+  </div>
+</div>
+
+<script>
+  // Play intro sound once when page loads
+  window.addEventListener("load", () => {
+    const intro = document.getElementById("intro-sound");
+    if (intro) intro.play();
+  });
+
+  function checkName() {
+    const input = document.getElementById("nameInput").value.trim().toLowerCase();
+    const error = document.getElementById("errorMsg");
+    const gate = document.getElementById("nameGate");
+    const content = document.getElementById("valentineContent");
+    const bgMusic = document.getElementById("bg-music");
+
+    if (input === "srinath") {
+      // Fade out name gate
+      gate.style.animation = "fadeIn 0.5s reverse";
+      setTimeout(() => {
+        gate.style.display = "none";
+        content.style.display = "block";
+      }, 500);
+
+      // Start background music ONLY after success
+      if (bgMusic) {
+        bgMusic.currentTime = 0;
+        bgMusic.play();
+      }
+
+    } else {
+      error.innerText = "Oops! Wrong name 💔 Try again";
+      error.style.animation = "popIn 0.3s";
+    }
+  }
+
+  // Allow Enter key to submit
+  document.getElementById("nameInput")
+    .addEventListener("keydown", function(e) {
+      if (e.key === "Enter") checkName();
+  });
+</script>
+
+<script src="script.js"></script>
+</body>
 </html>
